@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 class TaskController extends Controller
 {
@@ -13,9 +14,16 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {   
+        $user = Auth::user();
         $tasks = Task::where('status', false)->get();
+            //かつこれは
+        $user->task()->get();
+
+        //タスクが未完了のものだけ表示
         return view('tasks.index', compact('tasks'));
+        //「/tasks」にアクセスがあったら,
+        // 作成したindex.blade.phpの中身が表示
         // return view('tasks.index', ['tasks' => $tasks]);
         
     }
@@ -38,11 +46,12 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-
+        // $user = Auth::user();
         $rules = [
             'task_name' => 'required|max:100',
         ];
         
+
         $messages = ['required' => '必須項目です', 'max' => '100文字以下にしてください。'];
         
         Validator::make($request->all(), $rules, $messages)->validate();
@@ -50,8 +59,11 @@ class TaskController extends Controller
         //モデルをインスタンス化
         $task = new Task;
         
+        $task->user_id = Auth::user()->id;
         //モデル->カラム名 = 値 で、データを割り当てる
         $task->name = $request->input('task_name');
+
+      
         
         //データベースに保存
         $task->save();
@@ -67,10 +79,13 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
+
+    // public function show($id)
+    // {   $user = Auth::user();
+     
+    //     return view('tasks.show', compact('task'));
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -79,8 +94,9 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   $user = Auth::user();
         $task = Task::find($id);
+        $task->user_id = $user->id; 
         return view('tasks.edit', compact('task'));
     }
 
@@ -117,10 +133,12 @@ class TaskController extends Controller
         
             //該当のタスクを検索
             $task = Task::find($id);
+           
         
             //モデル->カラム名 = 値 で、データを割り当てる
             $task->status = true; //true:完了、false:未完了
-        
+            
+            $task->user_id = $user->id; 
             //データベースに保存
             $task->save();
         }
@@ -138,7 +156,12 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::user();
+        // $user = $user->id; 
         Task::find($id)->delete();
+        // $task->user_id = $user->id; 
+      
+        
         return redirect('/tasks');
     }
 }

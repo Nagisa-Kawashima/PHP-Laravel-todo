@@ -16,6 +16,11 @@
             <div class="py-6">
                 <p class="text-white text-xl">Todoアプリ</p>
             </div>
+            <div class="flex flex-row-reverse py-2">
+                <a href="dashboard"
+                    class="inline-block text-white text-x2">ダッシュボード
+                </a>
+            </div>
         </div>
     </header>
  

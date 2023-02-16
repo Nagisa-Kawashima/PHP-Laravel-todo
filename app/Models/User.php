@@ -41,4 +41,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function task()
+    //自分で決めた関数名を指定する
+    {
+        // return $this->belongsTo('App\Models\User');
+        return $this->hasMany(Task::class);
+    }
 }

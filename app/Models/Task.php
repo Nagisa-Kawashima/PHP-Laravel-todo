@@ -7,5 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
+    
+    // public function user()
+    // //自分で決めた関数名を指定する
+    // {
+        
+    //     return $this->belongsTo('App\Models\User');
+
+    // }
 }
