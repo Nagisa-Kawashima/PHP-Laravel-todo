@@ -13,20 +13,32 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {   
+        $keyword = $request->input('keyword'); //keywordが取れる
+        
         $user = Auth::user();
-        //タスクが未完了のものだけ表示
-        $tasks = Task::where('status', false)->where('user_id', $user->id )->get();
-            //かつこれは
-        // $user->task()->get();
-        $task = $user->task();
-        // dd($tasks);
+        if(is_null($keyword)) {
+             //タスクが未完了のものだけ表示 (currentuser用、通常ユーザーに見えている側　falseであれば検索出来るようにする)
+            $tasks = Task::where('status', false)->where('user_id', $user->id )->get();
+            //taskテーブルの　　　
+            // ステータスがfalseのものを探す
+            // user_id == current_userであるかどうか
+            // その条件のものがあれば取ってくる
+        } else {
+            $tasks = Task::where('status', false)->orderBy('created_at', 'asc')->where('user_id', $user->id )->where('name','like', "%$keyword%")->get();
+            //taskテーブルの　　　
+            // ステータスがfalseのものを探す
+            //投稿日時が昇順のものに並び変える
+            // user_id == current_userであるかどうか
+            //nameに入力していたものが含まれているのかどうか
+            // その条件のものがあれば取ってくる
+
+        }
        
-        return view('tasks.index', compact('tasks'));
-        //「/tasks」にアクセスがあったら,
+         //   /「/tasks」にアクセスがあったら,
         // 作成したindex.blade.phpの中身が表示
-        // return view('tasks.index', ['tasks' => $tasks]);
+        return view('tasks.index', ['tasks' => $tasks, 'keyword' => $keyword]); 
         
     }
 
@@ -82,12 +94,18 @@ class TaskController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
-    // public function show($id)
-    // {   $user = Auth::user();
+    ##showアクションどうするか
+    public function show(Request $request)
+     { 
+        $tasks = Task::all();
+        return view('tasks.show', compact('tasks'));
+        
+        //   $user = Auth::user();
+    // //     $task = Task::find($id);
+    // //     $task->user_id = user->id;
      
-    //     return view('tasks.show', compact('task'));
-    // }
+    // //     return view('tasks.show', compact('task'));
+    }
 
     /**
      * Show the form for editing the specified resource.

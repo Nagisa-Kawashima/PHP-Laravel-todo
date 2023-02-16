@@ -22,6 +22,7 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-sm">
                         <div class="p-2 text-white-100">
                             {{ __("ようこそ管理アプリへ") }}
+                        
                         </div>
                     </div>
                 </div>
@@ -58,7 +59,7 @@
                     <label class="w-full max-w-3xl mx-auto">
                         <input
                             class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-4 pl-4 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                            placeholder="洗濯物をする..." type="text" name="task_name" />
+                            placeholder="勉強をする..." type="text" name="task_name" />
                     </label>
                     @error('task_name')
                     <div class="mt-3">
@@ -75,6 +76,23 @@
                 </form>
 
 
+                <form action="" method ="get">
+
+                    <input value ="{{ $keyword }}"
+                    
+                     
+                        placeholder="検索キーワード" type="text" name="keyword" />
+                    <button type="submit" class="mt-8 p-4 bg-slate-800 text-white w-full max-w-xs hover:bg-slate-900 transition-colors">検索</button>
+                </form>
+
+
+
+
+
+
+
+
+
                 @if ($tasks->isNotEmpty())
                 <div class="max-w-7xl mx-auto mt-20">
                     <div class="inline-block min-w-full py-2 align-middle">
@@ -85,6 +103,9 @@
                                         <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
                                             タスク</th>
+                                        <th scope="col"
+                                            class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
+                                            投稿時刻</th>
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                             <span class="sr-only">Actions</span>
                                         </th>
@@ -98,6 +119,11 @@
                                                     {{ $item->name }}
                                                 </div>
                                             </td>
+                                            <td class="px-3 py-4 text-sm text-gray-500">
+                                                <div>
+                                                    {{ $item->created_at }}
+                                                </div>
+                                            </td>
                                             <td class="p-0 text-right text-sm font-medium">
                                                 <div class="flex justify-end">
                                                     <div>
@@ -108,8 +134,7 @@
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="status" value="{{$item->status}}">
-                                                            <button type="submit"
-                                                                class="bg-emerald-700 py-4 w-20 text-white md:hover:bg-emerald-800 transition-colors">完了</button>
+                                                            <button type="submit" class="bg-emerald-700 py-4 w-20 text-white md:hover:bg-emerald-800 transition-colors">完了</button>
                                                         </form>
                                                     </div>
                                                     <div>

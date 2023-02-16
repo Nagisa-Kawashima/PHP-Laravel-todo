@@ -33,26 +33,29 @@ Route::get('/', function () {
 #違う？？
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
-});
+
 
 // 上記で囲むことで、ログインされていること
 // という制約
-Route::post('/create',[TaskController::class,'create']);//タスク追加
-Route::post('/edit',[TaskController::class,'edit']);//タスク更新
-Route::post('/delete',[TaskController::class,'delete']);//タスク削除
-Route::resource('tasks', TaskController::class);
 
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+//verifiedはメールアドレスの認証にする機能　ログインする前の登録した段階でメール送信等の機能認証をする為のもの
+
+Route::middleware('auth')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
+    // Route::post('/create',[TaskController::class,'create']);//タスク追加
+    // Route::get('/show',[TaskController::class,'show']);//タスク詳細
+    // Route::post('/edit',[TaskController::class,'edit']);//タスク更新
+    // Route::post('/delete',[TaskController::class,'delete']);//タスク削除
+    Route::resource('tasks', TaskController::class);
+
     ##ここをdashboardcontrollerに変える？
-  });
+});
 
 
 Route::middleware('auth')->group(function () {
