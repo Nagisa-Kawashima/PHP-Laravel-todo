@@ -16,11 +16,13 @@ class TaskController extends Controller
     public function index()
     {   
         $user = Auth::user();
-        $tasks = Task::where('status', false)->get();
-            //かつこれは
-        $user->task()->get();
-
         //タスクが未完了のものだけ表示
+        $tasks = Task::where('status', false)->where('user_id', $user->id )->get();
+            //かつこれは
+        // $user->task()->get();
+        $task = $user->task();
+        // dd($tasks);
+       
         return view('tasks.index', compact('tasks'));
         //「/tasks」にアクセスがあったら,
         // 作成したindex.blade.phpの中身が表示
@@ -46,7 +48,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        // $user = Auth::user();
+        
         $rules = [
             'task_name' => 'required|max:100',
         ];
@@ -129,6 +131,7 @@ class TaskController extends Controller
             //データベースに保存
             $task->save();
         } else {
+            $user = Auth::user();
             //「完了」ボタンを押したとき
         
             //該当のタスクを検索
@@ -138,7 +141,7 @@ class TaskController extends Controller
             //モデル->カラム名 = 値 で、データを割り当てる
             $task->status = true; //true:完了、false:未完了
             
-            $task->user_id = $user->id; 
+            // $task->user_id = $user->id; 
             //データベースに保存
             $task->save();
         }
@@ -156,11 +159,13 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
+        $task = Task::find($id);        
         $user = Auth::user();
-        // $user = $user->id; 
-        Task::find($id)->delete();
-        // $task->user_id = $user->id; 
-      
+        if($task->user_id == $user->id) {
+            $task->delete();
+        }
+        
+         
         
         return redirect('/tasks');
     }

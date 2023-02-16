@@ -6,20 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Todo</title>
- 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     @vite('resources/css/app.css')
+    
 </head>
  
 <body class="flex flex-col min-h-[100vh]">
     <header class="bg-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
-            <div class="py-6">
+            <div class="py-2">
                 <p class="text-white text-xl">Todoアプリ</p>
             </div>
-            <div class="flex flex-row-reverse py-2">
-                <a href="dashboard"
-                    class="inline-block text-white text-x2">ダッシュボード
-                </a>
+            <div class="py-2">
+                <div class="col-md-4 col-lg-3 col-sm-3">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-sm">
+                        <div class="p-2 text-white-100">
+                            {{ __("ようこそ管理アプリへ") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex py-2 ">
+                <div class="me-3">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <button type="submit" class="text-md text-white btn btn-primary">
+                            {{ __('Log Out') }}
+                        </button>
+                    </form>
+                </div>
+                <div>
+                    <a href="/"
+                        class="inline-block text-white text-x2 btn btn-secondary">
+                        トップページへ
+                    </a>
+                </div>
             </div>
         </div>
     </header>
