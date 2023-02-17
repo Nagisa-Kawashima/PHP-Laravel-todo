@@ -20,17 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('hello');
 });
-// Route::get('/',[TaskController::class,'index']);//一覧表示
 
-
-
-// Route::post('/create',[TaskController::class,'create']);//タスク追加
-// Route::get('/show/{id}', [TaskController::class, 'show']);
-
-// Route::post('/edit{id}',[TaskController::class,'edit']);//タスク更新
-// Route::post('/delete{id}',[TaskController::class,'delete']);//タスク削除
-// Route::resource('tasks', TaskController::class);
-#違う？？
 
 
 
@@ -47,7 +37,7 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [TaskController::class, 'index'])->name('dashboard');
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks');
     // Route::post('/create',[TaskController::class,'create']);//タスク追加
     // Route::get('/show',[TaskController::class,'show']);//タスク詳細
     // Route::post('/edit',[TaskController::class,'edit']);//タスク更新
