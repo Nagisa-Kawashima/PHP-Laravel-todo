@@ -20,12 +20,15 @@ class TaskController extends Controller
         $user = Auth::user();
         if(is_null($keyword)) {
              //タスクが未完了のものだけ表示 (currentuser用、通常ユーザーに見えている側　falseであれば検索出来るようにする)
-            $tasks = Task::where('status', false)->where('user_id', $user->id )->get();
+            $tasks = Task::where('status', false)->where('user_id', $user->id )->orderBy('created_at', 'desc')->get();
             //taskテーブルの　　　
             // ステータスがfalseのものを探す
             // user_id == current_userであるかどうか
+            //降順(新しいものから上に並べられる)
             // その条件のものがあれば取ってくる
         } else {
+            //TODO; $keywordのescape処理(重要)
+
             $tasks = Task::where('status', false)->orderBy('created_at', 'asc')->where('user_id', $user->id )->where('name','like', "%$keyword%")->get();
             //taskテーブルの　　　
             // ステータスがfalseのものを探す
@@ -38,7 +41,8 @@ class TaskController extends Controller
        
          //   /「/tasks」にアクセスがあったら,
         // 作成したindex.blade.phpの中身が表示
-        return view('tasks.index', ['tasks' => $tasks, 'keyword' => $keyword]); 
+        return view('tasks.index', ['tasks' => $tasks, 'keyword' => $keyword, 'user'=>$user,
+    ]); 
         
     }
 
@@ -47,20 +51,9 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        
+          
         $rules = [
             'task_name' => 'required|max:100',
         ];
@@ -69,7 +62,7 @@ class TaskController extends Controller
         $messages = ['required' => '必須項目です', 'max' => '100文字以下にしてください。'];
         
         Validator::make($request->all(), $rules, $messages)->validate();
-
+        //TODO; トランザクション処理(普通)
         //モデルをインスタンス化
         $task = new Task;
         
@@ -83,9 +76,18 @@ class TaskController extends Controller
         $task->save();
         
         //リダイレクト
-        return redirect('/tasks');
-       
+        // return redirect('/tasks');
+        return redirect()->route('tasks.index');
+
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    
 
     /**
      * Display the specified resource.
@@ -95,16 +97,14 @@ class TaskController extends Controller
      */
 
     ##showアクションどうするか
-    public function show(Request $request)
+    public function show(Request $request, $id)
      { 
-        $tasks = Task::all();
-        return view('tasks.show', compact('tasks'));
-        
-        //   $user = Auth::user();
-    // //     $task = Task::find($id);
-    // //     $task->user_id = user->id;
-     
-    // //     return view('tasks.show', compact('task'));
+        //TODO; idが無効な時の処理(普通)
+        $task = Task::find($id);
+        return view('tasks.show',[
+            'task' => $task,
+        ]);
+
     }
 
     /**
@@ -116,8 +116,13 @@ class TaskController extends Controller
     public function edit($id)
     {   $user = Auth::user();
         $task = Task::find($id);
+        //TODO; idが無効な時の処理(普通)
         $task->user_id = $user->id; 
         return view('tasks.edit', compact('task'));
+        return view('tasks.edit',[
+            'task' => $task,
+        ]);
+
     }
 
     /**
@@ -127,8 +132,11 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+        $id = $request->input('id');
+
+        //input('id') == prams(id)みたいなもの
           //「編集する」ボタンをおしたとき
         if ($request->status === null) {
             $rules = [
@@ -138,10 +146,11 @@ class TaskController extends Controller
             $messages = ['required' => '必須項目です', 'max' => '100文字以下にしてください。'];
         
             Validator::make($request->all(), $rules, $messages)->validate();
-        
+             //TODO; トランザクション処理(普通)
         
             //該当のタスクを検索
             $task = Task::find($id);
+            //TODO; idが無効な時の処理(普通)
         
             //モデル->カラム名 = 値 で、データを割り当てる
             $task->name = $request->input('task_name');
@@ -151,9 +160,10 @@ class TaskController extends Controller
         } else {
             $user = Auth::user();
             //「完了」ボタンを押したとき
-        
+             //TODO; トランザクション処理(データを登録する過程で起こるエラーの処理を巻き戻す処理)(普通)
             //該当のタスクを検索
             $task = Task::find($id);
+            //TODO; idが無効な時の処理(普通)
            
         
             //モデル->カラム名 = 値 で、データを割り当てる
@@ -166,7 +176,9 @@ class TaskController extends Controller
     
     
         //リダイレクト
-        return redirect('/tasks');
+        // return redirect('/tasks');
+        return redirect()->route('tasks.index');
+
     }
 
     /**
@@ -175,16 +187,18 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $task = Task::find($id);        
+        $id = $request->input('id');
+        //TODO; idが無効な時の処理(普通)
+        $task = Task::find($id); 
+         //TODO; トランザクション処理(普通)       
         $user = Auth::user();
         if($task->user_id == $user->id) {
             $task->delete();
         }
         
          
-        
-        return redirect('/tasks');
+        return redirect()->route('tasks.index');
     }
 }

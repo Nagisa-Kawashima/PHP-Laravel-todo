@@ -22,13 +22,15 @@
     <main class="grow grid place-items-center">
         <div class="w-full mx-auto px-4 sm:px-6">
             <div class="py-[100px]">
-                <form action="/tasks/{{ $task->id }}" method="post" class="mt-10">
+                <form action="{{route('tasks.update')}}" method="post" class="mt-10">
                     @csrf
-                    @method('PUT')
+                    <!-- @method('PUT') -->
+                    <input type="hidden" name="id" value="{{$task->id}}">
+                    <!-- name= "id"を使う -->
 
                     <div class="flex flex-col items-center">
                         <label class="w-full max-w-3xl mx-auto">
-                            <input
+                            <input 
                                 class="placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-4 pl-4 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                                 type="text" name="task_name" value="{{ $task->name }}" />
                             @error('task_name')

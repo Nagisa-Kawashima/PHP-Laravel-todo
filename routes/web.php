@@ -21,10 +21,6 @@ Route::get('/', function () {
     return view('hello');
 });
 
-
-
-
-
 // 上記で囲むことで、ログインされていること
 // という制約
 
@@ -37,14 +33,24 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function () {
     // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks');
-    // Route::post('/create',[TaskController::class,'create']);//タスク追加
-    // Route::get('/show',[TaskController::class,'show']);//タスク詳細
-    // Route::post('/edit',[TaskController::class,'edit']);//タスク更新
-    // Route::post('/delete',[TaskController::class,'delete']);//タスク削除
-    Route::resource('tasks', TaskController::class);
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index'); //ok
+    
+    Route::post('/tasks/create', [TaskController::class, 'create'])->name('tasks.create'); //ok
+    //タスク追加
 
-    ##ここをdashboardcontrollerに変える？
+    Route::get('/tasks/show/{id}', [TaskController::class, 'show'])->name('tasks.show'); //ok
+    // タスク詳細 
+
+    Route::get('/tasks/edit/{id}', [TaskController::class, 'edit'])->name('tasks.edit'); //ok
+
+
+    Route::post('/tasks/update', [TaskController::class, 'update'])->name('tasks.update');
+    //taskステータス更新、編集後の更新
+
+    Route::post('/tasks/destroy', [TaskController::class, 'destroy'])->name('tasks.destroy');
+   //タスク削除
+    // Route::resource('tasks', TaskController::class);
+
 });
 
 

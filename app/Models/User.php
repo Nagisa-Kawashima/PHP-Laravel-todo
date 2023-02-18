@@ -45,7 +45,6 @@ class User extends Authenticatable
     public function task()
     //自分で決めた関数名を指定する
     {
-        // return $this->belongsTo('App\Models\User');
         return $this->hasMany(Task::class);
     }
 }

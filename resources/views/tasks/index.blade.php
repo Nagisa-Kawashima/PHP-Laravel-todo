@@ -18,11 +18,10 @@
                 <p class="text-white text-xl">Todoアプリ</p>
             </div>
             <div class="py-2">
-                <div class="col-md-4 col-lg-3 col-sm-3">
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-sm">
+                <div class="col-md-4">
+                    <div class="bg-white shadow-sm sm:rounded-sm">
                         <div class="p-2 text-white-100">
-                            {{ __("ようこそ管理アプリへ") }}
-                        
+                            <div>{{ "ようこそ".$user->name."さん！！" }}</div>
                         </div>
                     </div>
                 </div>
@@ -52,7 +51,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="py-[100px]">
                 <p class="text-2xl font-bold text-center">今日は何する？</p>
-                <form action="/tasks" method="post" class="mt-10">
+                <!-- <form action="/tasks" method="post" class="mt-10"> -->
+                <form action="{{route('tasks.create')}}" method="post" class="mt-10">
+
                   @csrf
  
                   <div class="flex flex-col items-center">
@@ -76,37 +77,29 @@
                 </form>
 
 
-                <form action="" method ="get">
+                <form action="" method ="get" class=" col-md-4  col-sm-8 mx-auto mt-5">
 
                     <input value ="{{ $keyword }}"
                     
                      
                         placeholder="検索キーワード" type="text" name="keyword" />
-                    <button type="submit" class="mt-8 p-4 bg-slate-800 text-white w-full max-w-xs hover:bg-slate-900 transition-colors">検索</button>
+                    <button type="submit" class="ms-4 p-4 bg-slate-800 text-white hover:bg-slate-900 transition-colors">検索</button>
                 </form>
-
-
-
-
-
-
-
-
 
                 @if ($tasks->isNotEmpty())
                 <div class="max-w-7xl mx-auto mt-20">
                     <div class="inline-block min-w-full py-2 align-middle">
-                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-300">
+                        <!-- <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg"> -->
+                            <table class="divide-gray-300 col-md-8 mx-auto">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
                                             タスク</th>
-                                        <th scope="col"
+                                        <!-- <th scope="col"
                                             class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900">
-                                            投稿時刻</th>
-                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                            投稿時刻</th> -->
+                                        <th scope="col" class="">
                                             <span class="sr-only">Actions</span>
                                         </th>
                                     </tr>
@@ -115,44 +108,55 @@
                                     @foreach ($tasks as $item)
                                         <tr>
                                             <td class="px-3 py-4 text-sm text-gray-500">
+
                                                 <div>
                                                     {{ $item->name }}
                                                 </div>
                                             </td>
-                                            <td class="px-3 py-4 text-sm text-gray-500">
+                                            <!-- <td class="px-3 py-4 text-sm text-gray-500">
                                                 <div>
                                                     {{ $item->created_at }}
                                                 </div>
-                                            </td>
+                                            </td> -->
                                             <td class="p-0 text-right text-sm font-medium">
-                                                <div class="flex justify-end">
+                                                <div class="d-flex justify-content-around">
                                                     <div>
-                                                        <form action="/tasks/{{ $item->id }}"
-                                                            method="post"
+                                                        <form action="{{route('tasks.update')}}" method="post" 
                                                             class="inline-block text-gray-500 font-medium"
                                                             role="menuitem" tabindex="-1">
                                                             @csrf
-                                                            @method('PUT')
+                                                            <!-- @method('PUT') -->
+                                                            <!-- <input type="hidden" name="_method" value="PUT">                 -->
+
+
                                                             <input type="hidden" name="status" value="{{$item->status}}">
+                                                            <input type="hidden" name="id" value="{{$item->id}}">
+
+
                                                             <button type="submit" class="bg-emerald-700 py-4 w-20 text-white md:hover:bg-emerald-800 transition-colors">完了</button>
                                                         </form>
                                                     </div>
                                                     <div>
-                                                        <a href="/tasks/{{ $item->id }}/edit/"
+                                                        <!-- <a href="/tasks/{{ $item->id }}/edit/" -->
+                                                        <a href="{{route('tasks.edit',['id'=>$item->id])}}"
                                                             class="inline-block text-center py-4 w-20 underline underline-offset-2 text-sky-600 md:hover:bg-sky-100 transition-colors">編集
                                                         </a>
                                                     </div>
                                                     <div>
                                                         <form onsubmit="return deleteTask();"
-                                                            action="/tasks/{{ $item->id }}" method="post"
+                                                            action="{{route('tasks.destroy')}}" method="post"
                                                             class="inline-block text-gray-500 font-medium"
                                                             role="menuitem" tabindex="-1">
                                                             @csrf
-                                                            @method('DELETE')
+                                                            <!-- @method('DELETE') -->
+                                                            <input type="hidden" name="id" value="{{$item->id}}">
                                                             <button type="submit"
                                                                 class="py-4 w-20 md:hover:bg-slate-200 transition-colors">削除
                                                             </button>
                                                         </form>
+                                                    </div>
+                                                    <div class="p-3">
+                                                    <a href="{{route('tasks.show',['id'=>$item->id])}}" class="btn btn-primary">詳細へ</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -160,7 +164,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
                 @endif
