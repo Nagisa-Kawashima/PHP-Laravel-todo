@@ -96,7 +96,7 @@ php artisan migrate:fresh --seed
 php artisan make:migration create_tasks_table
 ```
 
-## ## migration ファイルにカラムデータの記述を行う　
+##  migration ファイルにカラムデータの記述を行う　
 
 ## マイグレーションを実行
 
