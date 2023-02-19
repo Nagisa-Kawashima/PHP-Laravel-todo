@@ -48,7 +48,7 @@ php artisan migrate
 php artisan make:model TodoList -mc
 ```
 
-## migration ファイルにカラムデータの記述を行う　
+##  migration ファイルにカラムデータの記述を行う　
 
 ## todo_lists テーブルの作成を行う
 
