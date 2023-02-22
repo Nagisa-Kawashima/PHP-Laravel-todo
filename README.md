@@ -465,7 +465,16 @@ _method Laravelの仕様となっている　
 HTTPの理解　
 Laravelの特殊ルール 
 
+## サーバーを立ち上げる際
+```sh 
+ php atrisan serve
+ npm run dev
+``` 
+npm run dev とは？？
+> 開発用(開発：developer)のビルドコマンドです。コマンドを実行するたびに現在のプロジェクトをビルド(コンパイル)してくれます。
 
+## npmとは?
+Node.jsをインストールした時に同時にインストールされているパッケージ管理ツール
 
 
 
@@ -473,3 +482,13 @@ Laravelの特殊ルール
 ## 学習で学んだことのメモ
 
 [memo集forLaravel](https://drive.google.com/file/d/1vp5zzrzkweWX65XsGmJmPrsPDbPlciJY/view?usp=sharing)
+
+・Windows11
+・Laravel 9
+・PHP 8.1.0
+・Node.js 16.18.0 
+・npm 8.19.2
+・MAMP 5.0.0 ミドルウェアApach server PHPプログラム　MySQLがまとめて入っているもの
+
+・MySQL 5.27.24
+・Composer 2.5.3
