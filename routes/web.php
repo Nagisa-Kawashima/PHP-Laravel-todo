@@ -50,6 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks/destroy', [TaskController::class, 'destroy'])->name('tasks.destroy');
    //タスク削除
     // Route::resource('tasks', TaskController::class);
+    //resources 引数にidをつけるやり方　 show/{id}になっている　勝手に　 それをメソッドで引数で受け取るようになっている　
+    // resourcesでない場合は メソッド内で $id を定義する必要がある　input hidden もつける　
+
 
 });
 

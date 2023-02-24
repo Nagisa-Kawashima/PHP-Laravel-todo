@@ -11,7 +11,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up()  //マイグレーションが実行されたときに行われるメソッド
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
@@ -29,7 +29,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down() //ロールバックが実行された時に行われるメソッドです。
     {
         Schema::dropIfExists('users');
     }

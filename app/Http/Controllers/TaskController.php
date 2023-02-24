@@ -25,7 +25,7 @@ class TaskController extends Controller
             // ステータスがfalseのものを探す
             // user_id == current_userであるかどうか
             //降順(新しいものから上に並べられる)
-            // その条件のものがあれば取ってくる
+            // その条件のものがあれば取ってくる                                                                                                                                                                                                                             
         } else {
             //TODO; $keywordのescape処理(重要)
 
@@ -58,9 +58,9 @@ class TaskController extends Controller
             'task_name' => 'required|max:100',
         ];
         
-
+            //メッセージの日本語化
         $messages = ['required' => '必須項目です', 'max' => '100文字以下にしてください。'];
-        
+        // Validator::make($request->all(),バリデーションルール,エラーメッセージ);
         Validator::make($request->all(), $rules, $messages)->validate();
         //TODO; トランザクション処理(普通)
         //モデルをインスタンス化
